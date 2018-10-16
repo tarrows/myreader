@@ -1,9 +1,16 @@
 import { createStore } from 'redux';
-import reducer from './reducer';
-import middleware from './middleware';
+import { Store } from 'redux';
 
-const configureStore = initialState => {
-  const store = createStore(reducer, initialState, middleware);
+import { IAppState } from './app/types';
+import middleware from './middleware';
+import reducer from './reducer';
+
+export interface IApplicationState {
+  app: IAppState;
+}
+
+const configureStore: (initial: IApplicationState) => Store = initial => {
+  const store = createStore(reducer, initial, middleware);
   return store;
 }
 

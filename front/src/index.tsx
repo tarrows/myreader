@@ -11,7 +11,11 @@ import registerServiceWorker from './registerServiceWorker';
 setGlobalStyles();
 
 const renderApp = () => {
-  const initialState = {};
+  const initialState = {
+    app: {
+      theme: ''
+    }
+  };
   const store = configureStore(initialState);
 
   store.dispatch({ type: '@myReader/@@INIT' });
