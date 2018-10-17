@@ -1,7 +1,8 @@
 import { actionTypes } from './actions';
 import { Actions } from './actions';
+import { IAppState } from './types';
 
-const getInitialState = () => ({
+const getInitialState: () => IAppState = () => ({
   theme: 'dark'
 });
 

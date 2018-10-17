@@ -13,7 +13,7 @@ setGlobalStyles();
 const renderApp = () => {
   const initialState = {
     app: {
-      theme: ''
+      theme: 'dark'
     }
   };
   const store = configureStore(initialState);
