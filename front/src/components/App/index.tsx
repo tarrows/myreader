@@ -1,19 +1,22 @@
+import List from 'components/List';
 import * as React from 'react';
+import { ThemeProvider } from 'styled-components';
+import { colorsDark } from 'styles/palette';
 
 import logo from './logo.svg';
+import { Wrapper, Title } from './styles';
 
 class App extends React.Component {
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      <ThemeProvider theme={colorsDark}>
+        <div>
+          <Wrapper>
+            <Title>My Reader</Title>
+            <List />
+          </Wrapper>
+        </div>
+      </ThemeProvider>
     );
   }
 }
