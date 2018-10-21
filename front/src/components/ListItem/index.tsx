@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { CommentLink, Description, ExternalLink, Host, Item, Title } from './styles';
 
-const LINK_REL = 'no-follow no-referrer no-openner';
+const LINK_REL = 'nofollow noreferrer noopener';
 
 const ListItem = () => {
   return (
