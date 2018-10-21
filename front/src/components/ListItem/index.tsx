@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Item, Title, Host, ExternalLink, Description, CommentLink } from './styles';
+import { CommentLink, Description, ExternalLink, Host, Item, Title } from './styles';
 
 const LINK_REL = 'no-follow no-referrer no-openner';
 
