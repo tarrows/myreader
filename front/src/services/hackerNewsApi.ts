@@ -1,5 +1,10 @@
 import ApiService from './Api';
 
+/*
+ * HackerNews API Reference:
+ * https://github.com/HackerNews/API
+ */
+
 const JSON_QUERY = '.json?print=pretty';
 const BASE_URL = 'https://hacker-news.firebaseio.com/v0';
 const client = new ApiService({ baseURL: BASE_URL });
