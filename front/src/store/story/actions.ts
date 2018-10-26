@@ -2,6 +2,7 @@ import { Action, Dispatch } from 'redux';
 import { ActionCreator } from 'redux';
 
 import hackerNewsApi from 'services/hackerNewsApi';
+import { IStoryResponse } from 'services/hackerNewsApi';
 import { IStory, IStoryState } from './types';
 
 const NS = '@myReader/story';
@@ -102,12 +103,12 @@ export const fetchStories = (payload: IStoryState) => {
     if (storyIds && page) {
       dispatch(fetchStoriesRequest(storyIds, page));
       return hackerNewsApi.getStoriesByPage(storyIds, page)
-      .then(stories => dispatch(fetchStoriesSuccess({ stories })))
-      .catch(error => dispatch(fetchStoriesFailure({ error })));
+      .then(stories => dispatch(fetchStoriesSuccess(stories)))
+      .catch((error: Error) => dispatch(fetchStoriesFailure(error)));
     } else {
       return hackerNewsApi.getStoriesByPage([], 0)
-      .then(stories => dispatch(fetchStoriesSuccess({ stories })))
-      .catch(error => dispatch(fetchStoriesFailure({ erroro })));
+      .then(stories => dispatch(fetchStoriesSuccess(stories)))
+      .catch(error => dispatch(fetchStoriesFailure(error)));
     }      
   };
 };
@@ -131,12 +132,12 @@ const fetchStoriesRequest
 export interface IFetchStoriesSuccessAction {
   readonly type: actionType.FETCH_STORIES_SUCCESS;
   readonly payload: {
-    readonly stories: string[]
+    readonly stories: IStoryResponse[]
   };
 }
 
 const fetchStoriesSuccess
- = (stories: string[]): IFetchStoriesSuccessAction => {
+ = (stories: IStoryResponse[]): IFetchStoriesSuccessAction => {
   return {
     payload: { stories },
     type: actionType.FETCH_STORIES_SUCCESS

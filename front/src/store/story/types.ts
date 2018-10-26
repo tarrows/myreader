@@ -3,7 +3,7 @@ export interface IStoryState {
   stories?: IStory[];
   page?: number;
   isFetching?: boolean;
-  error?: string;
+  error?: Error;
 };
 
 export interface IStory {
