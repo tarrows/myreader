@@ -1,9 +1,9 @@
 import { Action, Dispatch } from 'redux';
-import { ActionCreator } from 'redux';
+// import { ActionCreator } from 'redux';
 
 import hackerNewsApi from 'services/hackerNewsApi';
 import { IStoryResponse } from 'services/hackerNewsApi';
-import { IStory, IStoryState } from './types';
+import { IStoryState } from './types';
 
 const NS = '@myReader/story';
 
@@ -25,80 +25,78 @@ enum actionType {
   FETCH_STORIES_FAILURE = "@myReader/story/FETCH_STORIES_FAILURE",
 }
 
-export type Actions = IStoryAction;
+export type IStoryActions = IStoryAction
+| IfetchStoryIdsRequestAction
+| IfetchStoryIdsSuccessAction
+| IfetchStoryIdsFailureAction
+| IFetchStoriesRequestAction
+| IFetchStoriesRequestAction
+| IFetchStoriesFailureAction;
 
 export interface IStoryAction extends Action {
   type: string;
   payload: IStoryState;
 } 
 
-/*
-const action: (act: IStoryAction) => (IStoryAction) =
-  ({ type, payload }) => ({ type, payload });
+export interface IfetchStoryIdsRequestAction extends Action {
+  readonly type: actionType.FETCH_STORY_IDS_REQUEST;
+  readonly payload: {};
+}
 
-const actions = {
-  fetchStoryIds: (payload: IStoryState) => {
-    return async (dispatch: Dispatch<IStoryAction>) => {
-      dispatch(action({
-        type: actionTypes.FETCH_STORY_IDS_REQUEST,
-        payload: payload
-      }));
-  
-      return hackerNewsApi.getTopStoryIds()
-        .then(storyIds => {
-          dispatch(action({
-            type: actionTypes.FETCH_STORY_IDS_SUCCESS, 
-            payload: { storyIds }
-          }));
-          dispatch(actions.fetchStories({ storyIds, page: 0}));
-          return storyIds;
-        })
-        .catch(error => dispatch(action({
-          type: actionTypes.FETCH_STORY_IDS_FAILURE, 
-          payload: { error }
-        })));
-    };
-  },
-
-  fetchStoryIds: (payload: IStoryState) => {
-    return async (dispatch: Dispatch<IStoryAction>) => {
-      dispatch(action({
-        type: actionTypes.FETCH_STORY_IDS_REQUEST,
-        payload
-      }));
-
-      return hackerNewsApi.getTopStoryIds()
-        .then(storyIds => {
-          dispatch(action({
-            type: actionTypes.FETCH_STORY_IDS_SUCCESS,
-            payload: { storyIds }
-          }));
-
-          dispatch(
-            actions.fetchStories({ storyIds, page: 0})
-          );
-          return storyIds;
-        })
-        .catch(error => dispatch(action({
-          type: actionTypes.FETCH_STORY_IDS_FAILURE, 
-          payload: { error }
-        })));
-    };
-  },
-
-  
+const fetchStoryIdsRequest = (): IfetchStoryIdsRequestAction => {
+  return {
+    payload: {},
+    type: actionType.FETCH_STORY_IDS_REQUEST
+  };
 };
 
+export interface IfetchStoryIdsSuccessAction extends Action {
+  readonly type: actionType.FETCH_STORY_IDS_SUCCESS;
+  readonly payload: {
+    readonly storyIds: number[];
+    readonly page: number;
+  };
+}
 
-action({
-        type: actionTypes.FETCH_STORIES_SUCCESS,
-        payload: { stories }
-      })
+const fetchStoryIdsSuccess = (storyIds: number[]): IfetchStoryIdsSuccessAction => {
+  return {
+    payload: { storyIds, page: 0 },
+    type: actionType.FETCH_STORY_IDS_SUCCESS
+  };
+};
 
-*/
+export interface IfetchStoryIdsFailureAction extends Action {
+  readonly type: actionType.FETCH_STORY_IDS_FAILURE;
+  readonly payload: {
+    readonly error: Error;
+  };
+};
+
+const fetchStoryIdsFailure = (error: Error): IfetchStoryIdsFailureAction => {
+  return {
+    payload: { error },
+    type: actionType.FETCH_STORY_IDS_FAILURE
+  };
+};
+
+export const fetchStoryIds = (payload?: IStoryState) => {
+  return async (dispatch: Dispatch<IStoryActions>) => {
+    dispatch(fetchStoryIdsRequest());
+
+    return hackerNewsApi.getTopStoryIds()
+    .then(response => {
+      dispatch(fetchStoryIdsSuccess(response.ids));
+      // dispatch(fetchStories({response.ids, page: 0}))
+      return response.ids;
+    })
+    .catch(error => {
+      dispatch(fetchStoryIdsFailure(error))
+    });
+  }
+};
 
 export const fetchStories = (payload: IStoryState) => {
-  return async (dispatch: Dispatch<IStoryAction>) => {
+  return async (dispatch: Dispatch<IStoryActions>) => {
     const { storyIds, page } = payload;
     if (storyIds && page) {
       dispatch(fetchStoriesRequest(storyIds, page));
@@ -113,7 +111,7 @@ export const fetchStories = (payload: IStoryState) => {
   };
 };
 
-export interface IFetchStoriesRequestAction {
+export interface IFetchStoriesRequestAction extends Action {
   readonly type: actionType.FETCH_STORIES_REQUEST;
   readonly payload: {
     readonly storyIds: number[];
@@ -129,7 +127,7 @@ const fetchStoriesRequest
   }
 }
 
-export interface IFetchStoriesSuccessAction {
+export interface IFetchStoriesSuccessAction extends Action {
   readonly type: actionType.FETCH_STORIES_SUCCESS;
   readonly payload: {
     readonly stories: IStoryResponse[]
@@ -144,7 +142,7 @@ const fetchStoriesSuccess
   }
 }
 
-export interface IFetchStoriesFailureAction {
+export interface IFetchStoriesFailureAction extends Action {
   readonly type: actionType.FETCH_STORIES_FAILURE;
   readonly payload: {
     readonly error: Error;
