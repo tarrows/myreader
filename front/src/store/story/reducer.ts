@@ -1,14 +1,16 @@
 import { actionTypes } from './actions';
+import { IStoryActions } from './actions';
+import { IStoryState } from './types';
 
-const getInitialState = () => ({
-  storyIds: [],
-  stories: [],
-  page: 0,
+export const getInitialState = (): IStoryState => ({
+  error: undefined,
   isFetching: false,
-  error: '',
+  page: 0,
+  stories: [],
+  storyIds: [],
 });
 
-const story = (state = getInitialState(), { type, payload }) => {
+const story = (state: IStoryState, { type, payload }: IStoryActions): IStoryState => {
   switch (type) {
     case actionTypes.FETCH_STORY_IDS_REQUEST:
     case actionTypes.FETCH_STORIES_REQUEST:
@@ -22,11 +24,14 @@ const story = (state = getInitialState(), { type, payload }) => {
         ...payload,
       };
     case actionTypes.FETCH_STORIES_SUCCESS:
-      return {
-        ...state,
-        stories: [...state.stories, ...payload.stories],
-        page: state.page + 1,
-        isFetching: false,
+      console.log("payload:", payload);
+      if (state.stories && state.page) {
+        return {
+          ...state,
+          stories: [...state.stories],
+          page: state.page + 1,
+          isFetching: false,
+        }
       }
     default:
       return state;

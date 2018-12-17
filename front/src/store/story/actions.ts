@@ -8,12 +8,12 @@ import { IStoryState } from './types';
 const NS = '@myReader/story';
 
 export const actionTypes = {
-  FETCH_STORY_IDS_REQUEST: `${NS}/FETCH_STORY_IDS_REQUEST`,
-  FETCH_STORY_IDS_SUCCESS: `${NS}/FETCH_STORY_IDS_SUCCESS`,
-  FETCH_STORY_IDS_FAILURE: `${NS}/FETCH_STORY_IDS_FAILURE`,
+  FETCH_STORIES_FAILURE: `${NS}/FETCH_STORIES_FAILURE`,
   FETCH_STORIES_REQUEST: `${NS}/FETCH_STORIES_REQUEST`,
   FETCH_STORIES_SUCCESS: `${NS}/FETCH_STORIES_SUCCESS`,
-  FETCH_STORIES_FAILURE: `${NS}/FETCH_STORIES_FAILURE`,
+  FETCH_STORY_IDS_FAILURE: `${NS}/FETCH_STORY_IDS_FAILURE`,
+  FETCH_STORY_IDS_REQUEST: `${NS}/FETCH_STORY_IDS_REQUEST`,
+  FETCH_STORY_IDS_SUCCESS: `${NS}/FETCH_STORY_IDS_SUCCESS`,
 }
 
 enum actionType {
@@ -30,7 +30,7 @@ export type IStoryActions = IStoryAction
 | IfetchStoryIdsSuccessAction
 | IfetchStoryIdsFailureAction
 | IFetchStoriesRequestAction
-| IFetchStoriesRequestAction
+| IFetchStoriesSuccessAction
 | IFetchStoriesFailureAction;
 
 export interface IStoryAction extends Action {

@@ -1,11 +1,11 @@
-import axios, { AxiosResponse, AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { AxiosBasicCredentials } from 'axios';
 
 const API_ROOT = process.env.URL || 'http://localhost:3000/';
 const TIMEOUT = 20000;
 const HEADERS = {
-  'Content-Type': 'application/json',
   Accept: 'application/json',
+  'Content-Type': 'application/json',
 };
 
 class ApiService {
@@ -19,35 +19,35 @@ class ApiService {
     baseURL?: string;
     timeout?: number;
     headers?: {
-      'Content-Type': string;
       Accept: string;
+      'Content-Type': string;
     }
   }, auth?: AxiosBasicCredentials){
     const client = axios.create({
+      auth,
       baseURL,
-      timeout,
       headers,
-      auth
+      timeout,
     });
 
     client.interceptors.response.use(this.handleSuccess, this.handleError);
     this.client = client;
   }
 
-  handleSuccess(response: AxiosResponse) {
-    return response;
-  }
-
-  handleError(error: AxiosError) {
-    return Promise.reject(error);
-  }
-
-  get(path: string) {
+  public get(path: string) {
     return this.client.get(path).then(response => response.data);
   }
 
-  post(path: string, payload: any) {
+  public post(path: string, payload: any) {
     return this.client.post(path, payload).then(response => response.data);
+  }
+
+  private handleSuccess(response: AxiosResponse) {
+    return response;
+  }
+
+  private handleError(error: AxiosError) {
+    return Promise.reject(error);
   }
 }
 

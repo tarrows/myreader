@@ -39,14 +39,14 @@ const getPageSlice = (limit = PAGE_LIMIT, page = 0) => ({ begin: page * limit, e
 const getPageValues = ({ begin, end, items }: IPageValuesArgs<IResponse>) => items.slice(begin, end);
 
 const hackerNewsApi = {
-  getTopStoryIds: (): Promise<ITopStoriesResponse> => client.get(`/topstories${JSON_QUERY}`),
-  getStory: (id: number): Promise<IStoryResponse> => client.get(`/item/${id}${JSON_QUERY}`),
   getStoriesByPage: (ids: number[], page: number) => {
     const { begin, end } = getPageSlice(PAGE_LIMIT, page);
-    const activeIds = getPageValues({ begin, end, items: ids.map(i => <IResponse>{id: i}) });
+    const activeIds = getPageValues({ begin, end, items: ids.map(i => ({id: i} as IResponse)) });
     const storyPromises = activeIds.map(id => hackerNewsApi.getStory(id.id));
     return Promise.all(storyPromises);
-  }
+  },
+  getStory: (id: number): Promise<IStoryResponse> => client.get(`/item/${id}${JSON_QUERY}`),
+  getTopStoryIds: (): Promise<ITopStoriesResponse> => client.get(`/topstories${JSON_QUERY}`),
 };
 
 export default hackerNewsApi;
