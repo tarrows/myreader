@@ -1,6 +1,11 @@
-from django.test import TestCase
+import json
 
+from functools import partial
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory
 from .models import Story
+from .factory import StoryFactory
+from .views import StoryViewSet
 
 # Create your tests here.
 
@@ -22,3 +27,11 @@ class NewsTests(TestCase):
         new_story = Story.objects.get(id=1)
         for key, expected_value in story_data.items():
             self.assertEquals(expected_value, getattr(new_story, key))
+
+    def test_story_post_single(self):
+        story = StoryFactory.stub().__dict__
+        print(story)
+        api = APIRequestFactory()
+        request = api.post('/stories/', json.dumps(story), content_type='application/json')
+        response = StoryViewSet.as_view({'post': 'create'})(request)
+        self.assertEquals(response.status_code, 201)
