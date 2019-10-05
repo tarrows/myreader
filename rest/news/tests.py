@@ -30,8 +30,15 @@ class NewsTests(TestCase):
 
     def test_story_post_single(self):
         story = StoryFactory.stub().__dict__
-        print(story)
         api = APIRequestFactory()
         request = api.post('/stories/', json.dumps(story), content_type='application/json')
         response = StoryViewSet.as_view({'post': 'create'})(request)
+        self.assertEquals(response.status_code, 201)
+
+    def test_story_post_multiple(self):
+        stories = [StoryFactory.stub().__dict__ for _ in range(3)]
+        api = APIRequestFactory()
+        request = api.post('/stories/', json.dumps(stories), content_type='application/json')
+        response = StoryViewSet.as_view({'post': 'create'})(request)
+        self.assertCountEqual(stories, response.data)
         self.assertEquals(response.status_code, 201)
